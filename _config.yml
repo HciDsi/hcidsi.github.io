@@ -74,7 +74,7 @@ ga_domain: huangxuan.me
 
 # Sidebar settings
 sidebar: true # whether or not using Sidebar.
-sidebar-about-description: #"要做一个有 swag 的程序员 <br> React Team @ Meta"
+sidebar-about-description: May all the beauty be blessed #"要做一个有 swag 的程序员 <br> React Team @ Meta"
 sidebar-avatar: img/Kiana.png #http://s23hnh3gs.bkt.clouddn.com/Kiana.png?e=1696574573&token=12LYCxsn3y9m8bRjdfyBw7jJKPd1eyLDt0dDuref:A73pHfXCKWxbUiECRBQc4sePWtI= # use absolute URL, seeing it's used in both `/` and `/about/`
 
 # Featured Tags
