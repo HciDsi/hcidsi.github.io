@@ -4,4 +4,4 @@ My interests include animations, games <del>(especially JRPGs)</del>, and novels
 
 At present, I am studying computer graphics, game engine development, and Unity game development. I have a passion for and a deep love for the technology that turns fantasies into reality.
 
-You can reach me at hcidsi@qq.com.
+You can reach me at HciDsiXKH@outlook.com.

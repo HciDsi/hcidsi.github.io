@@ -4,4 +4,4 @@ Hey，我是徐科豪（@hcidsi），来自华北理工大学，师从吴亚峰�
 
 现阶段在学习计算机图形学，游戏引擎开发和Unity游戏开发，喜欢并热爱计算机将幻想变为现实的技术。
 
-联系方式 hcidsi@qq.com
+联系方式 HciDsiXKH@outlook.com
