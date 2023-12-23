@@ -14,11 +14,11 @@ tags:
 >[项目地址](https://github.com/HciDsi/GenshinRender_Like)
 
 >Unity 2023.1
-### 前言
+# 前言
 
 上一篇我们完成了角色卡通渲染的着色，除了着色以外我们还需要实现描边效果，使我们的渲染更贴近赛璐璐风格动画
 
-### 着色效果分析
+# 着色效果分析
 
 赛璐璐风格动画的三个特点：清晰的线条描边，大色块，边缘锐利的阴影，之前的文章中已经实现了大色块和边缘锐利的阴影，我们希望我们的渲染更加卡通加入线条描边是一个不错的方法。
 
@@ -32,7 +32,7 @@ tags:
 
 本次我们使用基于过程几何方法的Back facing描边法，其原理是通过两次绘制一次绘制对象一次以法线偏移的方式绘制描边
 
-### 从二开始的卡通着色器之旅
+# 从二开始的卡通着色器之旅
 
 （1） 延续上一节Unity urp项目
 
@@ -44,17 +44,17 @@ tags:
     {
         Name "Outline"
         Tags {"LightMode" = "SRPDefaultUnlit"}
-
+    
         Cull Front
-
+    
         HLSLPROGRAM
-
+    
         #pragma vertex vert
         #pragma fragment frag
-
+    
         ENDHLSL
     }
-    
+
 
 （4） 接下来我们来实现描边
 
@@ -71,10 +71,10 @@ tags:
         
         v2f o;
         o.pos = vertexInput.positionCS;
-
+    
         return o;
     }
-
+    
     half4 frag(v2f i) : SV_TARGET
     {
         return _OutlineColor; //输出描边颜色
@@ -97,7 +97,7 @@ tags:
     using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
-
+    
     public class SmoothNormalsWeighted : MonoBehaviour
     {
         private void Awake()
@@ -106,15 +106,15 @@ tags:
             Vector3[] vertices = mesh.vertices;
             Vector3[] normals = mesh.normals;
             Vector4[] tangents = mesh.tangents;
-
+    
             // 创建一个字典以存储每个顶点的加权平均法线
             Dictionary<Vector3, Vector3> smoothNormals = new Dictionary<Vector3, Vector3>();
-
+    
             for (int i = 0; i < vertices.Length; i++)
             {
                 Vector3 vertex = vertices[i];
                 Vector3 normal = normals[i];
-
+    
                 if (smoothNormals.ContainsKey(vertex))
                 {
                     // 如果顶点已经在字典中，则累加法线
@@ -126,17 +126,17 @@ tags:
                     smoothNormals[vertex] = normal;
                 }
             }
-
+    
             // 更新切线数据以存储平滑法线
             for (int i = 0; i < vertices.Length; i++)
             {
                 Vector3 vertex = vertices[i];
                 Vector3 smoothNormal = smoothNormals[vertex].normalized;
-
+    
                 // 更新切线数据
                 tangents[i] = new Vector4(smoothNormal.x, smoothNormal.y, smoothNormal.z, 1f);
             }
-
+    
             // 将更新后的切线数据应用到网格
             mesh.tangents = tangents;
         }
@@ -164,10 +164,10 @@ tags:
         v2f o;
         o.pos = vertexInput.positionCS;
         o.uv = TRANSFORM_TEX(v.uv, _LightMap);
-
+    
         return o;
     }
-
+    
     half4 frag(v2f i) : SV_TARGET
     {
         half4 lightMap = SAMPLE_TEXTURE2D(_LightMap, sampler_LightMap, i.uv);
@@ -175,23 +175,23 @@ tags:
     
         index = lerp(index, 1, step(0.2, lightMap.a));
         index = lerp(index, 3, step(0.8, lightMap.a));
-        
+
 
         half4 FColor = SAMPLE_TEXTURE2D(_ShadowRamp, sampler_ShadowRamp, half2(0.75, index / 10.0 + 0.005 +0.5));
-
+    
         return FColor; //输出描边颜色
     }
 
 ![彩色描边](https://hcidsi-blog-1317560990.cos.ap-shanghai.myqcloud.com/img/Snipaste_2023-10-31_16-26-10.png)
 
-### 结语
+# 结语
 
 ![渲染最终结果](https://hcidsi-blog-1317560990.cos.ap-shanghai.myqcloud.com/img/Snipaste_2023-10-31_16-45-27.png)
 
 我们将描边效果结合上一节的渲染效果得到以上结果，我们得到了一个完成卡通渲染的效果，完整代码已上传[Github](https://github.com/HciDsi/GenshinRender_Like)代码在Shades目录下的Hutao.shader，现在我们的渲染已经实现了卡通渲染效果但和原神的效果还有差距，比如原神的阴影，原神的后处理，之后我们会逐一实现
 
-    
-### 参考
+
+# 参考
 >https://zhuanlan.zhihu.com/p/109101851
 
 >https://zhuanlan.zhihu.com/p/508319122

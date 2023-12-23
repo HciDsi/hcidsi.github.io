@@ -14,11 +14,27 @@ tags:
 >[项目地址](https://github.com/HciDsi/GenshinRender_Like)
 
 >Unity 2023.1
-### 前言
+---
+layout: post
+title: "在Unity中实现NPR渲染是否搞错了什么？-特殊卡通角色着色"
+subtitle: "——Unity URP实现"
+author: "HciDsi"
+header-img: "img/h000.png"
+header-mask: 0.3
+mathjax: true
+tags:
+  - Unity
+  - Shader
+  - NPR
+---
+>[项目地址](https://github.com/HciDsi/GenshinRender_Like)
+
+>Unity 2023.1
+# 前言
 
 上一篇我们完成了角色卡通渲染的基础着色，但是我们还有一些问题没有解决，这一次我们来解决上次没有解决的问题，我们来解决等屏幕边缘光和角色面部阴影的问题
 
-### 着色效果分析
+# 着色效果分析
 
 首先我来分析卡通渲染的面部阴影，卡通渲染的面部阴影应该满足赛璐璐风格的色彩特征（大色块，边缘锐利的阴影），使用上一篇的shader我们得到的效果与原神的角色渲染对比如下
 
@@ -30,7 +46,7 @@ tags:
 
 这一次我们来实现这些效果
 
-### 从一开始的卡通着色器之旅
+# 从一开始的卡通着色器之旅
 
 （1） 延续上一节Unity urp项目
 
@@ -59,12 +75,12 @@ tags:
     half3 lightDir = half3(L.x, 0.0, L.z); //获取光照方向向量
     half FdotL = dot(faceDir, lightDir); //获取光照方向与面部向量的点乘
     half FcrossL = cross(faceDir, lightDir).y; //获取光照方向与面部向量的朝向
-
+    
     half2 faceUV = i.uv;
     faceUV.x = lerp(faceUV.x, 1 - faceUV.x, step(0, FcrossL)); //获取面部阴影方向用于面部阴影UV
     half faceshadow = SAMPLE_TEXTURE2D(_FaceLightMap, sampler_FaceLightMap, faceUV); //采样阴影光照贴图
     shadow = step(-0.5 * FdotL + 0.5, faceshadow); //以兰伯特法对面部阴影采样
-
+    
     half faceMask = SAMPLE_TEXTURE2D(_FaceShadow, sampler_FaceShadow, i.uv).a; //获取面部阴影范围 
     shadow =lerp(shadow, 1.0, faceMask); //对面部阴影范围进行限制
 
@@ -90,7 +106,7 @@ tags:
     half2 offsetUV = half2(normalVS.x * _RimOffset * 10.0 / _ScreenParams.x, 0.0); //获取边缘光宽度（偏移量）
     half offsetDepth = SampleSceneDepth(screenUV + offsetUV);
     half offset = LinearEyeDepth(offsetDepth, _ZBufferParams);
-
+    
     rim = smoothstep(0.0, _RimThreshold, offset - depth) * _RimIntensity; //通过偏移量与观察深度的差获取等屏幕距离边缘光
     rim = rim * pow(saturate(1 - dot(N, V)), 5.0); //软化边缘光
 
@@ -100,18 +116,18 @@ tags:
     {
         Name "DepthNormals"
         Tags{"LightMode" = "DepthNormals"}
-
+    
         ZWrite On
         Cull[_Cull]
-
+    
         HLSLPROGRAM
-
+    
         #pragma vertex DepthNormalsVertex
         #pragma fragment DepthNormalsFragment
-
+    
         #include "Packages/com.unity.render-pipelines.universal/Shaders/LitInput.hlsl"
         #include "Packages/com.unity.render-pipelines.universal/Shaders/LitDepthNormalsPass.hlsl"
-
+    
         ENDHLSL
     }
 
@@ -125,14 +141,14 @@ tags:
 
 以上是发光材质的效果
 
-### 结语
+# 结语
 
 ![渲染最终结果](https://hcidsi-blog-1317560990.cos.ap-shanghai.myqcloud.com/img/Snipaste_2023-10-31_16-46-45.png)
 
 我们将面部SDF阴影，等距离边缘光和发光材质结合上一节的渲染效果得到以上结果，我们得到了一个基本完成着色的模型，完整代码已上传[Github](https://github.com/HciDsi/GenshinRender_Like)代码在Shades目录下的Hutao.shader，下一节我们将实现角色基础卡通渲染的最后环节描边。
 
-    
-### 参考
+
+# 参考
 >https://zhuanlan.zhihu.com/p/109101851
 
 >https://zhuanlan.zhihu.com/p/508319122
